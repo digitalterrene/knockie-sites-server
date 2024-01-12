@@ -35,26 +35,28 @@ const upsert_new_website = async (req, res) => {
 const fetch_websites = async (req, res) => {
   try {
     const db = await connectToDatabase();
-    // Check if the url a already exists
-    const websites = await db.collection("websites").find({
+    const { key, value } = req.params;
+    // Check if the url already exists
+    const websitesCursor = await db.collection("websites").find({
       $or: [
         {
-          name: { $regex: req.params.value, $options: "i" },
+          name: { $regex: value, $options: "i" },
         },
         {
-          url: { $regex: req.params.value, $options: "i" },
+          url: { $regex: value, $options: "i" },
         },
         {
-          description: { $regex: req.params.value, $options: "i" },
+          description: { $regex: value, $options: "i" },
         },
       ],
     });
-    if (websites) {
-      //if query already exists, return
-      return res
-        .status(200)
-        .json({ websites: websites.toArray(), value: req.params.value });
+    const websitesArray = await websitesCursor.toArray();
+
+    if (websitesArray.length > 0) {
+      // If there are websites, return them
+      return res.status(200).json(websitesArray);
     } else {
+      // If no websites match the search, return 404
       return res.status(404).json({ message: "No websites match the search" });
     }
   } catch (error) {
@@ -62,6 +64,7 @@ const fetch_websites = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 module.exports = {
   upsert_new_website,
   fetch_websites,
