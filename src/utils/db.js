@@ -9,7 +9,7 @@ const connectToDatabase = async () => {
   try {
     await client.connect();
     console.log("Connected to MongoDB in controller");
-    return client.db("vertueal-accounts");
+    return client.db("knockie-sites");
   } catch (error) {
     console.error("MongoDB connection error in controller:", error);
   }
@@ -18,7 +18,7 @@ const connectToDatabase = async () => {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
-    db = client.db("vertueal-accounts");
+    db = client.db("knockie-sites");
   } catch (error) {
     console.error(error);
   }

@@ -32,7 +32,37 @@ const upsert_new_website = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
+const fetch_websites = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    // Check if the url a already exists
+    const websites = await db.collection("websites").find({
+      $or: [
+        {
+          name: { $regex: req.params.value, $options: "i" },
+        },
+        {
+          url: { $regex: req.params.value, $options: "i" },
+        },
+        {
+          description: { $regex: req.params.value, $options: "i" },
+        },
+      ],
+    });
+    if (websites) {
+      //if query already exists, return
+      return res
+        .status(200)
+        .json({ websites: websites.toArray(), value: req.params.value });
+    } else {
+      return res.status(404).json({ message: "No websites match the search" });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   upsert_new_website,
+  fetch_websites,
 };
