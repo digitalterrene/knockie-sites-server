@@ -7,7 +7,7 @@ const MongoClient = mongodb.MongoClient;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://account.vertueal.com"],
+  origin: ["http://localhost:3000", "https://knockie-sites-now.vercel.app"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allow cookies and HTTP authentication
   optionsSuccessStatus: 204, // No Content response for preflight requests
