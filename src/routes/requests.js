@@ -6,13 +6,13 @@ const router = express.Router();
 //adding new data
 router.post("/upsert-new", upsert_new_request);
 router.post("/scrape", webScraperMiddleware, (req, res) => {
-  const { sections } = req;
+  const { data } = req;
   const { url } = req.body;
   try {
     if (!url) {
       return res.status(400).json({ error: "url is  required" });
     }
-    return res.status(200).json({ sections: sections });
+    return res.status(200).json({ data });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

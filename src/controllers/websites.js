@@ -3,7 +3,7 @@ const { processSEO } = require("../utils/websites-reqs-mapping");
 const { connectToDatabase } = require("../utils/db");
 
 const upsert_new_website = async (req, res) => {
-  const { sections } = req;
+  const { data } = req;
   try {
     const db = await connectToDatabase();
     const { url, name, description, google_safe_browsing_api_check } = req.body;
@@ -24,7 +24,11 @@ const upsert_new_website = async (req, res) => {
     }
     const inserted_website = await db
       .collection("websites")
-      .insertOne({ ...req.body, sections: sections });
+      .insertOne({
+        ...req.body,
+        favicon: data?.favicon,
+        sections: data?.sections,
+      });
     if (inserted_website) {
       res.status(201).json({ message: "Successfully inserted new website" });
     }
